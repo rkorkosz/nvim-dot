@@ -40,3 +40,9 @@
 [submodule "plugins/cmp_luasnip"]
 	path = plugins/cmp_luasnip
 	url = https://github.com/saadparwaiz1/cmp_luasnip
+[submodule "plugins/none-ls.nvim"]
+	path = plugins/none-ls.nvim
+	url = https://github.com/nvimtools/none-ls.nvim
+[submodule "plugins/lsp-format.nvim"]
+	path = plugins/lsp-format.nvim
+	url = https://github.com/lukas-reineke/lsp-format.nvim.git

@@ -22,7 +22,10 @@ require('telescope').setup({
 })
 
 local lspconfig = require('lspconfig')
-lspconfig.gopls.setup {}
+lspconfig.gopls.setup({
+	on_attach = require('lsp-format').on_attach,
+})
+lspconfig.ccls.setup({})
 
 local builtin = require('telescope.builtin')
 
@@ -65,6 +68,11 @@ wk.register({
 		s = { builtin.git_status, "Git status" },
 		t = { builtin.git_stash, "Git stash" },
 	},
+	c = {
+		name = "+code",
+		a = { vim.lsp.buf.code_action, "Code action" },
+		r = { vim.lsp.buf.rename, "Rename" },
+	},
 }, { prefix = "<leader>" })
 
 wk.register({
@@ -80,6 +88,7 @@ wk.register({
 	r = { vim.lsp.buf.rename, "Rename" },
 	c = { vim.lsp.buf.code_action, "Code action" },
 	f = { function()
-		vim.lsp.buf.format { async = true }
+		vim.lsp.buf.format({ async = true })
 	end, "Format" },
 }, { prefix = "<space>"})
+
