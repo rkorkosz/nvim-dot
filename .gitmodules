@@ -46,3 +46,9 @@
 [submodule "plugins/lsp-format.nvim"]
 	path = plugins/lsp-format.nvim
 	url = https://github.com/lukas-reineke/lsp-format.nvim.git
+[submodule "plugins/nvim-tree.lua"]
+	path = plugins/nvim-tree.lua
+	url = https://github.com/nvim-tree/nvim-tree.lua
+[submodule "gitsigns.nvim"]
+	path = gitsigns.nvim
+	url = https://github.com/lewis6991/gitsigns.nvim

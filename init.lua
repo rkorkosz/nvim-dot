@@ -1,3 +1,6 @@
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.opt.termguicolors = true
 vim.cmd.colorscheme "catppuccin"
 vim.opt.number = true
 vim.opt.ignorecase = true
@@ -8,6 +11,7 @@ vim.g.mapleader = ','
 vim.o.timeout = true
 vim.o.timeoutlen = 300
 
+require('nvim-tree').setup()
 require('lualine').setup()
 require('nvim-treesitter.configs').setup({
 	ensure_installed = {"go", "gomod"},
@@ -21,6 +25,7 @@ require('telescope').setup({
 	},
 })
 
+require('gitsigns').setup()
 local lspconfig = require('lspconfig')
 lspconfig.gopls.setup({
 	on_attach = require('lsp-format').on_attach,
@@ -46,7 +51,6 @@ cmp.setup({
 		{ name = 'buffer' },
 	})
 })
-
 local wk = require("which-key")
 wk.setup()
 
@@ -73,6 +77,7 @@ wk.register({
 		a = { vim.lsp.buf.code_action, "Code action" },
 		r = { vim.lsp.buf.rename, "Rename" },
 	},
+	e = { ":NvimTreeOpen<CR>", "File explorer" },
 }, { prefix = "<leader>" })
 
 wk.register({
