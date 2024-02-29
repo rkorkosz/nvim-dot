@@ -50,5 +50,8 @@
 	path = plugins/nvim-tree.lua
 	url = https://github.com/nvim-tree/nvim-tree.lua
 [submodule "gitsigns.nvim"]
-	path = gitsigns.nvim
+	path = plugins/gitsigns.nvim/gitsigns.nvim
 	url = https://github.com/lewis6991/gitsigns.nvim
+[submodule "none-ls.nvim"]
+	path = plugins/none-ls.nvim/none-ls.nvim
+	url = https://github.com/nvimtools/none-ls.nvim
