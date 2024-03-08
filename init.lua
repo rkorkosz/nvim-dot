@@ -10,6 +10,7 @@ vim.opt.shiftwidth = 2
 vim.g.mapleader = ','
 vim.o.timeout = true
 vim.o.timeoutlen = 300
+vim.o.undofile = true
 
 require('nvim-tree').setup()
 require('lualine').setup()
@@ -25,10 +26,28 @@ require('telescope').setup({
 	},
 })
 
-require('gitsigns').setup()
+local gs = require('gitsigns')
+gs.setup()
 local lspconfig = require('lspconfig')
 lspconfig.gopls.setup({
-	on_attach = require('lsp-format').on_attach,
+	settings = {
+		gopls = {
+			completeUnimported = true,
+			gofumpt = true,
+			staticcheck = true,
+			codelenses = {
+				gc_details = true,
+				tidy = true,
+				upgrade_dependency = true,
+			},
+			analyses = {
+				fieldalignment = true,
+				shadow = true,
+				unusedvariable = true,
+				unusedwrite = true,
+			},
+		},
+	},
 })
 lspconfig.ccls.setup({})
 
@@ -67,6 +86,18 @@ wk.register({
 		b = { builtin.buffers, "Find Buffer" },
 		d = { builtin.diagnostics, "Diagnostics" },
 	},
+	h = {
+		name = "+GitSigns",
+		s = { gs.stage_hunk, "Stage hunk" },
+		r = { gs.reset_hunk, "Reset hunk" },
+		S = { gs.stage_buffer, "Stage buffer" },
+		u = { gs.undo_stage_hunk, "Undo stage hunk" },
+		R = { gs.reset_buffer, "Reset buffer" },
+		p = { gs.preview_hunk, "Preview hunk" },
+		b = { function() gs.blame_line{full=true} end, "Blame line" },
+		B = { gs.toggle_current_line_blame, "Toggle line blame" },
+		d = { gs.diffthis, "Diff" },
+	},
 	g = {
 		name = "+git",
 		s = { builtin.git_status, "Git status" },
@@ -79,6 +110,13 @@ wk.register({
 	},
 	e = { ":NvimTreeOpen<CR>", "File explorer" },
 }, { prefix = "<leader>" })
+
+wk.register({
+	h = {
+		s = { function() gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, "Stage hunk" },
+		r = { function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, "Reset hunk" },
+	},
+}, { mode = 'v', prefix = '<leader>' })
 
 wk.register({
 	g = {
@@ -97,3 +135,24 @@ wk.register({
 	end, "Format" },
 }, { prefix = "<space>"})
 
+local null_ls = require("null-ls")
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+null_ls.setup({
+	on_attach = function(client, bufnr)
+        if client.supports_method("textDocument/formatting") then
+            vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                group = augroup,
+                buffer = bufnr,
+                callback = function()
+                    vim.lsp.buf.format({ async = false })
+                end,
+            })
+        end
+    end,
+	sources = {
+		null_ls.builtins.completion.spell,
+		null_ls.builtins.formatting.goimports,
+		null_ls.builtins.formatting.gofumpt,
+	},
+})
