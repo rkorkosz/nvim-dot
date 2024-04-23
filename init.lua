@@ -11,6 +11,7 @@ vim.g.mapleader = ','
 vim.o.timeout = true
 vim.o.timeoutlen = 300
 vim.o.undofile = true
+vim.opt.mouse = ''
 
 require('nvim-tree').setup()
 require('lualine').setup()
@@ -154,5 +155,7 @@ null_ls.setup({
 		null_ls.builtins.completion.spell,
 		null_ls.builtins.formatting.goimports,
 		null_ls.builtins.formatting.gofumpt,
+		null_ls.builtins.code_actions.gomodifytags,
 	},
 })
+require("Comment").setup()
